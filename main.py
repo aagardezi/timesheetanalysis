@@ -6,7 +6,7 @@ from streamlit_float import *
 from streamlit_google_auth import Authenticate
 from streamlit_pills import pills
 import vertexai
-from vertexai.generative_models import FunctionDeclaration, GenerativeModel, Tool, Part, FinishReason, SafetySetting
+# from vertexai.generative_models import FunctionDeclaration, GenerativeModel, Tool, Part, FinishReason, SafetySetting
 from google import genai
 from google.genai import types
 from google.cloud import bigquery
@@ -17,8 +17,7 @@ import json
 from tenacity import retry, wait_random_exponential
 
 import helperbqfunction
-import geminifunctionsbq
-import geminifunctionfinhub
+
 import gemini20functionfinhub
 import gemini20functiongeneral
 import gemini20functionalphavantage
@@ -34,7 +33,7 @@ import helpertimesheetdata
 
 
 import gemini20handler
-import gemini15handler
+
 
 from google.cloud import pubsub_v1
 
@@ -171,23 +170,23 @@ def display_restore_messages(logger):
 
     logger.warning("Messages restored")
 
-market_query_tool = Tool(
-    function_declarations=[
-        geminifunctionsbq.sql_query_func,
-        geminifunctionsbq.list_datasets_func,
-        geminifunctionsbq.list_tables_func,
-        geminifunctionsbq.get_table_func,
-        geminifunctionsbq.sql_query_func,
-        geminifunctionfinhub.symbol_lookup,
-        geminifunctionfinhub.company_news,
-        geminifunctionfinhub.company_profile,
-        geminifunctionfinhub.company_basic_financials,
-        geminifunctionfinhub.company_peers,
-        geminifunctionfinhub.insider_sentiment,
-        geminifunctionfinhub.financials_reported,
-        geminifunctionfinhub.sec_filings,
-    ],
-)
+# market_query_tool = Tool(
+#     function_declarations=[
+#         geminifunctionsbq.sql_query_func,
+#         geminifunctionsbq.list_datasets_func,
+#         geminifunctionsbq.list_tables_func,
+#         geminifunctionsbq.get_table_func,
+#         geminifunctionsbq.sql_query_func,
+#         geminifunctionfinhub.symbol_lookup,
+#         geminifunctionfinhub.company_news,
+#         geminifunctionfinhub.company_profile,
+#         geminifunctionfinhub.company_basic_financials,
+#         geminifunctionfinhub.company_peers,
+#         geminifunctionfinhub.insider_sentiment,
+#         geminifunctionfinhub.financials_reported,
+#         geminifunctionfinhub.sec_filings,
+#     ],
+# )
 
 market_query20_tool = types.Tool(
     function_declarations=[
@@ -384,24 +383,24 @@ generate_config_20 = types.GenerateContentConfig(
     tools= [market_query20_tool],
 )
 
-safety_settings = [
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        threshold=SafetySetting.HarmBlockThreshold.OFF
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF
-    ),
-    SafetySetting(
-        category=SafetySetting.HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold=SafetySetting.HarmBlockThreshold.OFF
-    ),
-]
+# safety_settings = [
+#     SafetySetting(
+#         category=SafetySetting.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+#         threshold=SafetySetting.HarmBlockThreshold.OFF
+#     ),
+#     SafetySetting(
+#         category=SafetySetting.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+#         threshold=SafetySetting.HarmBlockThreshold.OFF
+#     ),
+#     SafetySetting(
+#         category=SafetySetting.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+#         threshold=SafetySetting.HarmBlockThreshold.OFF
+#     ),
+#     SafetySetting(
+#         category=SafetySetting.HarmCategory.HARM_CATEGORY_HARASSMENT,
+#         threshold=SafetySetting.HarmBlockThreshold.OFF
+#     ),
+# ]
 
 
 def handle_api_response(message_placeholder, api_requests_and_responses, backend_details):
@@ -482,13 +481,13 @@ def get_chat_history():
         with st.sidebar:
             pills("Chat History", messages, messageicon)
 
-def init_chat_session(client, model):
+def init_chat_session(client):
     st.session_state.messages = []
     st.session_state.sessioncount = 0
     st.session_state.client = bigquery.Client(project="genaillentsearch")
     st.session_state.chat = client
     st.session_state.aicontent = []
-    st.session_state.chat15 = model.start_chat()
+    # st.session_state.chat15 = model.start_chat()
 
 
 def display_sidebar(logger, view_systeminstruction, USE_AUTHENTICATION, get_chat_history, init_chat_session, authenticator):
@@ -498,7 +497,7 @@ def display_sidebar(logger, view_systeminstruction, USE_AUTHENTICATION, get_chat
             st.image(st.session_state['user_info'].get('picture'))
             if st.button('Log out'):
                 authenticator.logout()
-        st.header("MarketMind")
+        st.header("ChronosAI")
         st.toggle("Async Agent",False, on_change=on_async_change, key="asyncagent")
         get_chat_history()
         if st.button("Start new Chat"):
@@ -576,16 +575,16 @@ if st.session_state['connected'] or not USE_AUTHENTICATION:
             )
 
             #Gemini1.5 Client
-            vertexai.init(project=PROJECT_ID, location=LOCATION)
-            model = GenerativeModel(
-                # "gemini-1.5-pro-002",
-                st.session_state.modelname,
-                system_instruction=[SYSTEM_INSTRUCTION],
-                tools=[market_query_tool],
-            )
-            st.session_state.gemini15 = model
+            # vertexai.init(project=PROJECT_ID, location=LOCATION)
+            # model = GenerativeModel(
+            #     # "gemini-1.5-pro-002",
+            #     st.session_state.modelname,
+            #     system_instruction=[SYSTEM_INSTRUCTION],
+            #     tools=[market_query_tool],
+            # )
+            # st.session_state.gemini15 = model
             st.session_state.gemini20 = client
-            init_chat_session(client, model)
+            init_chat_session(client)
             st.session_state.chatstarted = True
             if "session_id" not in st.session_state:
                 st.session_state.session_id = str(uuid.uuid4())
@@ -606,9 +605,9 @@ if st.session_state['connected'] or not USE_AUTHENTICATION:
         
         st.image("images/chronosailogo.png")
         if USE_AUTHENTICATION:
-            st.title(f"""{st.session_state['user_info'].get('name')}! MarketMind: built using {st.session_state.modelname}""")
+            st.title(f"""{st.session_state['user_info'].get('name')}! ChronosAI: built using {st.session_state.modelname}""")
         else:
-            st.title(f"""MarketMind: built using {st.session_state.modelname}""")
+            st.title(f"""ChronosAI: built using {st.session_state.modelname}""")
         
         st.caption(f"Currently only available for US Securities -- {helpercode._get_session().id}")
 
@@ -639,12 +638,12 @@ if st.session_state['connected'] or not USE_AUTHENTICATION:
                     with st.chat_message("assistant"):
                         st.markdown("Message sent awaiting response...")
                 else:
-                    if st.session_state.modelname.startswith("gemini-1.5"):
-                        gemini15handler.handle_gemini15(prompt, logger, PROJECT_ID, LOCATION, PROMPT_ENHANCEMENT, 
-                                                        generation_config, safety_settings, handle_api_response, handle_external_function)
-                    else:
-                        gemini20handler.handle_gemini20(prompt, logger, PROJECT_ID, LOCATION, PROMPT_ENHANCEMENT, 
-                                                        generate_config_20, handle_api_response, handle_external_function)
+                    # if st.session_state.modelname.startswith("gemini-1.5"):
+                    #     gemini15handler.handle_gemini15(prompt, logger, PROJECT_ID, LOCATION, PROMPT_ENHANCEMENT, 
+                    #                                     generation_config, safety_settings, handle_api_response, handle_external_function)
+                    # else:
+                    gemini20handler.handle_gemini20(prompt, logger, PROJECT_ID, LOCATION, PROMPT_ENHANCEMENT, 
+                                                    generate_config_20, handle_api_response, handle_external_function)
         except Exception as e:
             with st.chat_message("error",avatar=":material/chat_error:"):
                 message_placeholder = st.empty()

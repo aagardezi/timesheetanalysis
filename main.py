@@ -208,7 +208,7 @@ market_query20_tool = types.Tool(
         gemini20functiontimesheet.get_timesheet_data
         # gemini20functionalphavantage.monthly_stock_price,
         # gemini20functionalphavantage.market_sentiment,
-    ], code_execution=type.ToolCodeExecution()
+    ], code_execution=types.ToolCodeExecution()
 )
 
 TEMP_INSTRUCTION = f"""lseg tick history data and uses RIC and ticker symbols to analyse stocks

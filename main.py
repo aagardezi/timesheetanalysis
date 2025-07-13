@@ -143,7 +143,7 @@ def handle_external_function(api_requests_and_responses, params, function_name):
     
     if function_name in helpertimesheetdata.function_handler.keys():
         logger.warning("timesheet data function found")
-        api_response = helpertimesheetdata.function_handler[function_name](params)
+        api_response = helpertimesheetdata.function_handler[function_name]()
         api_requests_and_responses.append(
                                 [function_name, params, api_response]
                         )

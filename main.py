@@ -255,7 +255,9 @@ Your primary objective is to transform raw timesheet records into meaningful, ac
 
 You will call the function get_timesheet_data to get the data.
 
-You will receive timesheet data as a Market up data set from the above function call, where each record represents a distinct timesheet action or status. The fields available for analysis are precisely defined as follows:
+The function call will return a markup data set. this is based on the pandas data frame. 
+
+You will receive timesheet data as a markup data set from the above function call, where each record represents a distinct timesheet action or status. The fields available for analysis are precisely defined as follows:
 
     TimesheetStartDate (Date): The start date of the reporting period for the timesheet.
     TimesheetEndDate (Date): The end date of the reporting period for the timesheet. This is the target date for on-time submission.
@@ -380,7 +382,7 @@ generate_config_20 = types.GenerateContentConfig(
       threshold="OFF"
     )],
     system_instruction=[types.Part.from_text(text=SYSTEM_INSTRUCTION)],
-    tools= [market_query20_tool],
+    tools= [market_query20_tool, types.Tool(code_execution=types.ToolCodeExecution())],
 )
 
 # safety_settings = [

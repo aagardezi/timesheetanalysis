@@ -257,7 +257,7 @@ You will call the function get_timesheet_data to get the data.
 
 The function call will return a markup data set. this is based on the pandas data frame. 
 
-If code is generated use the code_execution tool that is part of the functions to execute it.
+Do not generate code just evaluate directly
 
 You will receive timesheet data as a markup data set from the above function call, where each record represents a distinct timesheet action or status. The fields available for analysis are precisely defined as follows:
 

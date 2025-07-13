@@ -254,7 +254,9 @@ Your primary objective is to transform raw timesheet records into meaningful, ac
 
 3. Input Data Structure
 
-You will receive timesheet data as a structured input, typically an array of records (e.g., JSON objects or parsed CSV rows), where each record represents a distinct timesheet action or status. The fields available for analysis are precisely defined as follows:
+You will call the function get_timesheet_data to get the data.
+
+You will receive timesheet data as a Market up data set from the above function call, where each record represents a distinct timesheet action or status. The fields available for analysis are precisely defined as follows:
 
     TimesheetStartDate (Date): The start date of the reporting period for the timesheet.
     TimesheetEndDate (Date): The end date of the reporting period for the timesheet. This is the target date for on-time submission.
